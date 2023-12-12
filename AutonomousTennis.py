@@ -3,12 +3,28 @@ import time
 from roboflow import Roboflow
 import cv2 as cv
 
+# Distance constants 
+KNOWN_DISTANCE = 45 #INCHES
+TENNIS_WIDTH = 2.5 #INCHES
+
+
 CAM_X = 1920
 CAM_Y = 1080
 CENTER_THRESHOLD = 450
 CAM_CENTER_X = CAM_X / 2.0
 CAM_CENTER_Y = CAM_Y / 2.0
 BASE_SPEED = 25
+
+def focal_length_finder (measured_distance, real_width, width_in_rf):
+    focal_length = (width_in_rf * measured_distance) / real_width
+
+    return focal_length
+
+# distance finder function 
+def distance_finder(focal_length, real_object_width, width_in_frmae):
+    distance = (real_object_width * focal_length) / width_in_frmae
+    return distance
+
 
 def main():
     model = initVision()
@@ -30,7 +46,10 @@ def main():
         if tennisball_centers:
             start_time = time.time()
             ball = tennisball_centers[0]
-
+            
+            focal_ball = focal_length_finder(KNOWN_DISTANCE, MOBILE_WIDTH, result['predictions'][0]['width'])
+            distance = distance_finder(focal_ball, TENNIS_WIDTH, result['predictions'][0]['width'])
+            
             if ball[0] < CAM_CENTER_X - CENTER_THRESHOLD:
                 dist = 1.5 * ((ball[0] / (CAM_CENTER_X - CENTER_THRESHOLD)) ** -1)
                 bot.drive_direct(int(dist * BASE_SPEED), BASE_SPEED)
@@ -42,6 +61,7 @@ def main():
             else:
                 bot.drive_direct(8 * BASE_SPEED, 8 * BASE_SPEED)
                 print("Straight Ahead")
+            print("Distance: ", distance, " inches")
 
         else:
             if time.time() - start_time > 3:
