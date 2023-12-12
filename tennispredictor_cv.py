@@ -2,7 +2,7 @@ from roboflow import Roboflow
 import cv2 as cv
 
 
-rf = Roboflow(api_key="eZdzAwikjCP3QUN6iDFF")
+rf = Roboflow(api_key="-- Insert API Key --")
 project = rf.workspace().project("tennis-balls-rai2k")
 model = project.version(11).model
 
@@ -19,19 +19,19 @@ print(model.predict("tennisball.jpg", confidence=40, overlap=30).json())
 
 
 
-# videoCapture = cv.VideoCapture(0)
+videoCapture = cv.VideoCapture(0)
 
 
-# while True:
-#     ret, frame = videoCapture.read()
-#     if not ret: break
+while True:
+    ret, frame = videoCapture.read()
+    if not ret: break
 
-#     result = model.predict(frame, confidence=60, overlap=30).json()
+    result = model.predict(frame, confidence=60, overlap=30).json()
     
-#     print(result)
+    print(result)
 
-#     if cv.waitKey(1) & 0xFF == ord('q'): break
+    if cv.waitKey(1) & 0xFF == ord('q'): break
 
 
-# videoCapture.release()
-# cv.destroyAllWindows()
+videoCapture.release()
+cv.destroyAllWindows()

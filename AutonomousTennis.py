@@ -76,7 +76,7 @@ def getCenter(x, y, width, height):
 
 def initVision():
     # Import the roboflow YOLOv8 trained tennis ball CV model
-    rf = Roboflow(api_key="eZdzAwikjCP3QUN6iDFF")
+    rf = Roboflow(api_key="-- Insert API Key --")
     project = rf.workspace().project("tennis-balls-rai2k")
     model = project.version(11).model
     return model

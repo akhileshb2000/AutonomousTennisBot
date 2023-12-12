@@ -32,4 +32,4 @@ sensors = bot.get_sensors()  # returns all data
 print("sensor data: ", sensors.light_bumper_left)
 
 # Close the connection
-# bot.close()
+bot.close()
